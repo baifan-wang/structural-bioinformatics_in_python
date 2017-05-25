@@ -2,17 +2,20 @@ import numpy as np
 
 class Atom():
     def __init__(self, atom):
-        '''atom should be a list contains the following information'''
-        self.serial =        atom[0]    #atom serial number, must be int
-        self.name =          atom[1]    #atom name, string
-        self.res_name =      atom[2]    #residues name(type), sring
-        self.chain_id =      atom[3]    #chain id, one letter, string
+        """Create Atom object.
+        The Atom object stores atom serial, name, coordinate, element type
+        as well as residue name and serial, chain id in which atom belong to.
+        parameters, 'atom' should be a list contains the following information"""
+        self.serial =        atom[0]    #atom serial number, int
+        self.name =          atom[1]    #atom name, eg. 'CA', string
+        self.res_name =      atom[2]    #residues name, eg. 'ALA', sring
+        self.chain_id =      atom[3]    #chain id, one letter, eg. 'A', string
         self.res_serial =    atom[4]    #residue serial number, int
-        self.coord =         np.array(atom[5:8]) #x,y,z coordinates of atom
+        self.coord =         np.array(atom[5:8]) #x, y, z coordinates of atom, [float]
         self.x =             self.coord[0]    #x coordinate, float
         self.y =             self.coord[1]    #y coordinate, float
         self.z =             self.coord[2]    #z coordinate, float
-        self.element =       atom[8]    #type of element, such as 'N', 'H', 'O'
+        self.element =       atom[8]    #type of element, eg. 'C'
 
     def __str__(self):
         return('Atom object: ' +self.chain_id+ '.'+str(self.res_serial)+'.'+self.res_name+'.'+self.atom_name)
@@ -100,7 +103,7 @@ class Atom():
 
     def plane(self, other2, other3):
         """
-        compute the function of plane defined by self, other2, other3.
+        Compute the function of plane defined by self, other2, other3.
         the norm of a plane is (a,b,c)"""
         a = (other2.y-self.y)*(other3.z-self.z)-(other2.z-self.z)*(other3.y-self.y)
         b = (other2.z-self.z)*(other3.x-self.x)-(other2.x-self.x)*(other3.z-self.z)
@@ -113,14 +116,15 @@ class Atom():
         pass
 
     def to_pdb(self):
-        """return a PDB format line"""
+        """
+        Return a PDB format line.
+        """
         self.character = 'ATOM'
         self.alter_local_indicater = ''
         self.code_for_insertions_of_residues = ''
         self.occupancy = 1.00
         self.temp_factor = 0.00
         self.segment_indent = ''
-        self.element_symbol = ''
         self.charge = ''
 
         if len(self.name) <4:
@@ -132,17 +136,47 @@ class Atom():
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
                 self.x , self.y , self.z , self.occupancy ,\
                 self.temp_factor , self.segment_indent.ljust(4) , \
-                self.element_symbol.rjust(2) , self.charge)
+                self.element.rjust(2) , self.charge)
         return s
 
 
 class Dummy(Atom):
-    """Dummy atom class, only has a name and coordinates"""
+    """
+    Creat Dummy atom class.
+    Dummy atom only has a name and coordinates.
+    """
     def __init__(self, name, coord):
-        self.name = name
-        self.coord = np.array(coord)
-        self.x = self.coord[0]
+        self.name = name             #name of dummy atom, str
+        self.coord = np.array(coord) #coordinates of dummy atom, [float]
+        self.x = self.coord[0]       #x,y,z coordinates of dummy atom.
         self.y = self.coord[1]
         self.z = self.coord[2]
+
     def __str__(self):
         return('Dummy atom object: %s' %self.name)
+
+     def to_pdb(self, serial, res_name='MOL', chian_id='A', res_serial, element='X'):
+        """res_serial
+        return a PDB format line.
+        extra information must be provided.
+        """
+        self.character = 'ATOM'
+        self.alter_local_indicater = ''
+        self.code_for_insertions_of_residues = ''
+        self.occupancy = 1.00
+        self.temp_factor = 0.00
+        self.segment_indent = ''
+        self.element = ''
+        self.charge = ''
+
+        if len(self.name) <4:
+            atom_name=(' '+self.name).ljust(4)
+        else:
+            atom_name=self.name.ljust(4)
+        s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
+                % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
+                self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
+                self.x , self.y , self.z , self.occupancy ,\
+                self.temp_factor , self.segment_indent.ljust(4) , \
+                self.element.rjust(2) , self.charge)
+        return s
