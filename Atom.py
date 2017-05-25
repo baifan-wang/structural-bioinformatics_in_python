@@ -4,7 +4,7 @@ class Atom():
     def __init__(self, atom):
         '''atom should be a list contains the following information'''
         self.serial =        atom[0]    #atom serial number, must be int
-        self.atom_name =     atom[1]    #atom name, string
+        self.name =          atom[1]    #atom name, string
         self.res_name =      atom[2]    #residues name(type), sring
         self.chain_id =      atom[3]    #chain id, one letter, string
         self.res_serial =    atom[4]    #residue serial number, int
@@ -123,12 +123,12 @@ class Atom():
         self.element_symbol = ''
         self.charge = ''
 
-        if len(self.atom_name) <4:
-            atom_name=(' '+self.atom_name).ljust(4)
+        if len(self.name) <4:
+            atom_name=(' '+self.name).ljust(4)
         else:
-            atom_name=self.atom_name.ljust(4)
+            atom_name=self.name.ljust(4)
         s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
-                % (self.character.ljust(6) , self.atom_serial , atom_name,  self.res_name.rjust(3) , \
+                % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
                 self.x , self.y , self.z , self.occupancy ,\
                 self.temp_factor , self.segment_indent.ljust(4) , \
