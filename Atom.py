@@ -1,6 +1,6 @@
 import numpy as np
 
-class Atom:
+class Atom():
     def __init__(self, atom):
         '''atom should be a list contains the following information'''
         self.serial =        atom[0]    #atom serial number, must be int
