@@ -13,6 +13,7 @@ class Atom():
         self.chain_id =      atom[3]    #chain id, one letter, eg. 'A', string
         self.res_serial =    atom[4]    #residue serial number, int
         self.coord =         np.array(atom[5:8]) #x, y, z coordinates of atom, [float]
+        assert self.coord.shape == (3, )
         self.x =             self.coord[0]    #x coordinate, float
         self.y =             self.coord[1]    #y coordinate, float
         self.z =             self.coord[2]    #z coordinate, float
@@ -34,6 +35,7 @@ class Atom():
         """
         distance between two point :(sum((ai - bi)**2 for ai, bi in zip(self.coord, other.coord)))**.5
         """
+        assert other.coord.shape == (3, )
         d = self.coord - other.coord
         return np.sqrt(np.sum(d*d))
 
@@ -44,6 +46,8 @@ class Atom():
         vector of other3->other2,
         else will compute the angle of between the point self, other1, other2.
         """
+        assert other1.coord.shape == (3, )
+        assert other2.coord.shape == (3, )
         v1 = other1.coord - self.coord # vector of A->B = [b.x-a.x, b.y-a.y, b.z-a.z]
         distance1 = np.sqrt(v1.dot(v1)) #the length of the vector
         v2 = other1.coord - other2.coord
@@ -51,6 +55,7 @@ class Atom():
             distance2 =np.sqrt(v2.dot(v2))
             sca = np.dot(v1, v2)/(distance1*distance2)
         else:
+            assert other3.coord.shape == (3, )
             v3 = other3.coord - other2.coord
             distance3 = np.sqrt(v3.dot(v3))
             sca = np.dot(v1, v3)/(distance1*distance3)
@@ -76,7 +81,6 @@ class Atom():
         Return angle in degrees.
         """
         tang=0.0
-        assert self.coord.shape == (3, )
         assert other2.coord.shape == (3, )
         assert other3.coord.shape == (3, )
         assert other4.coord.shape == (3, )
@@ -113,6 +117,9 @@ class Atom():
         """
         Compute the function of plane defined by self, other2, other3.
         the norm of a plane is (a,b,c)"""
+        assert other2.coord.shape == (3, )
+        assert other3.coord.shape == (3, )
+
         a = (other2.y-self.y)*(other3.z-self.z)-(other2.z-self.z)*(other3.y-self.y)
         b = (other2.z-self.z)*(other3.x-self.x)-(other2.x-self.x)*(other3.z-self.z)
         c = (other2.x-self.x)*(other3.y-self.y)-(other2.y-self.y)*(other3.x-self.x)
@@ -156,6 +163,7 @@ class Dummy(Atom):
     def __init__(self, name, coord):
         self.name = name             #name of dummy atom, str
         self.coord = np.array(coord) #coordinates of dummy atom, [float]
+        assert self.coord.shape == (3, )
         self.x = self.coord[0]       #x,y,z coordinates of dummy atom.
         self.y = self.coord[1]
         self.z = self.coord[2]
@@ -163,7 +171,7 @@ class Dummy(Atom):
     def __str__(self):
         return('Dummy atom object: %s' %self.name)
 
-     def to_pdb(self, serial, res_name='MOL', chian_id='A', res_serial, element='X'):
+    def to_pdb(self, serial, res_serial, res_name='MOL', chian_id='A', element='X'):
         """res_serial
         return a PDB format line.
         extra information must be provided.

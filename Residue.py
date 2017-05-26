@@ -9,7 +9,7 @@ class Residue():
         self.serial = serial            #residue serial number, int
         self.name = name                #residue name, str, eg., 'AlA'
         self.chain_id = chain_id        #chain id, str, single letter,
-        if atoms == None:               #atoms should be a dict, deafult is NOne
+        if atoms == None:               #atoms should be a dict, deafult is None
             self.atoms = {}
         else:
             self.atoms = atoms 
@@ -19,6 +19,12 @@ class Residue():
         return ('Residue object: %s' %self.id)
 
     __repr__=__str__
+
+    def __eq__(self, other):
+        """
+        Check whether this atom and other atom are the same
+        """
+        return (self.container == other.container) and (self.id == other.id) and (self.coordinates() == self.coordinates())
 
     def __len__(self):
         """
