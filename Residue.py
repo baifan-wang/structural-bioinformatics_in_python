@@ -1,14 +1,19 @@
 import numpy as np
 class Residue():
+    """Create Residue object.
+    The Residue object stores residue serial, name, chain id and Atom objects.
+    Atom objects are stored in a dict named atoms.
+    """
     def __init__(self, serial, name, chain_id, atoms=None):
-        self.serial = serial
-        self.name = name
-        self.chain_id = chain_id
-        if atoms == None:
+        self.container = 'M'            #indicate which molecule this atom belong to, object
+        self.serial = serial            #residue serial number, int
+        self.name = name                #residue name, str, eg., 'AlA'
+        self.chain_id = chain_id        #chain id, str, single letter,
+        if atoms == None:               #atoms should be a dict, deafult is NOne
             self.atoms = {}
         else:
             self.atoms = atoms 
-        self.id = self.chain_id+str(self.serial)
+        self.id = self.chain_id+str(self.serial)  #an id to identificate this residue
 
     def __str__(self):
         return ('Residue object: %s' %self.id)
@@ -21,11 +26,11 @@ class Residue():
         """
         return len(self.atoms)
 
-    def __contains__(self, atom_name):
+    def __contains__(self, atom):
         """
         True if there is a atom in this reidue.
         """
-        return (atom_name in self.atoms)
+        return (atom in self.atoms.values())
 
     def get_atom(self):
         for a in self.atoms:
@@ -37,8 +42,7 @@ class Residue():
         Checks for adding duplicate atoms, and raises a ValueError if so.
         """
         atname = atom.name
-        if atname.endswith("'"):      #some atoms have " ' " in they names.
-            atname = atname[:-1]+'_'  #use the '_' to replace " ' "
+        atname = atname.replace("'", "_")  #use the '_' to replace " ' "
         if atname in self:
             raise ValueError("Atom %s defined twice in residue %s" % (atname, self))
         self.atoms[atname] = atom
