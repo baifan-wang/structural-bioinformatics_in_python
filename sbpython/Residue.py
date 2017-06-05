@@ -1,19 +1,20 @@
 import numpy as np
 class Residue():
-    """Create Residue object.
+    """
+    Create Residue object.
     The Residue object stores residue serial, name, chain id and Atom objects.
     Atom objects are stored in a dict named atoms.
     """
     def __init__(self, serial, name, chain_id, atoms=None):
-        self.container = ''            #indicate which molecule this atom belong to, object
+        self.container = ''            #indicate which molecule this residue belong to, object
         self.serial = serial            #residue serial number, int
         self.name = name                #residue name, str, eg., 'AlA'
         self.chain_id = chain_id        #chain id, str, single letter,
         if atoms == None:               #atoms should be a dict, deafult is None
             self.atoms = {}
         else:
-            self.atoms = atoms
-            for a in self.atoms.values():
+            self.atoms = atoms             #if a dict contains Atom objects is suplied,
+            for a in self.atoms.values():  #set the container of Atom objects to self.
                 a.container = self
         self.id = self.chain_id+str(self.serial)  #an id to identificate this residue
 

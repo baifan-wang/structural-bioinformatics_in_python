@@ -6,12 +6,20 @@ class Molecule():
     Residue objects are stored in a dict named residues.
     """
     def __init__(self, residues=None, name=None, molecule_type=None):
-        if residues is None:
-            self.residues = {}
+        self.container = ''            #indicate which model this molecule belong to, object
+        if residues is None:           #residues should be a dict, deafult is None
+            self.residues = {}         #if None, cerat a empty dict
         else:
             self.residues = residues
-        self.name = name
-        self.molecule_type = molecule_type #protien, DNA, RNA, HYB, small, ion
+        self.name = name               #residue name, str, eg., 'M1'
+        self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
+        self.id = str(self.container)+self.name
+        
+    def __str__(self):
+        return self.id
+
+    __repr__=__str__
+
 
     def __getattr__(self, args):
         """
