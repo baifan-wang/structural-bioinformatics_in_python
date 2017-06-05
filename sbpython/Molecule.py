@@ -33,14 +33,14 @@ class Molecule():
         """
         True if there is a residue in this molecule.
         """
-        id = residue.chain_id+residue.serial
-        return (residue.id in self.residues) and (residue.container == self)
+        id = residue.id
+        return (id in self.residues) and (residue.container == self)
 
     def add_residue(self, residue):
         """Adding a residue to this molecule.
         raise KeyError if key conflict.
         """
-        id = residue.chain_id+residue.serial
+        id = residue.id
         if id in self.residues:
             raise KeyError("%s is already in this molecule!" %id)
         self.residues[id] = residue
@@ -96,19 +96,20 @@ class Molecule():
 
     def backbone(self):
         """
-        return coordinate of backbone atoms of this molecule."""
+        return coordinate of backbone atoms of this molecule.
+        """
         coordinate = []
-        protein_bb = set('N', 'CA', 'C')
+        protein_bb = set("N", "CA", "C", "O")
         nucleic_acid_bb = set("P","O5'","C5'","C4'","C3'","O3'")
-        if self.molecule_type == 'protein':  #backbone atom of protein is 'N', 'CA', 'C':
+        if self.molecule_type == 'protein': 
             for a in self.get_atoms:
                 if a.name in protein_bb:
                     coordinate.append(a.coord)
         elif self.molecule_type == 'DNA' or self.molecule_type == 'RNA':
             for a in self.get_atoms:
-                if a.name in protein_bb:
+                if a.name in nucleic_acid_bb:
                     coordinate.append(a.coord)
         else:
-            print("This molecule type: %s doesn't have a defined backbone type." %molecule_type)
+            print("This molecule type: %s doesn't have a defined backbone atom." %molecule_type)
             return None
         return np.array(coordinate)
