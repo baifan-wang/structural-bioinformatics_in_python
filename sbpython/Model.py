@@ -9,7 +9,7 @@ class Model():
             self.molecules = {}
         else:
             self.molecules = molecules
-        self.id=''
+        self.id='model'
 
     def __str__(self):
         return self.id
@@ -39,12 +39,12 @@ class Model():
         id = molecule.id
         return (id in self.molecules) and (molecule.container == self)
 
-    def add_residue(self, molecule):
+    def add_molecule(self, molecule):
         """Adding a molecule to this molecule.
         raise KeyError if key conflict.
         """
         id = molecule.id
-        if id in self.residues:
+        if id in self.molecules:
             raise KeyError("%s is already in this molecule!" %id)
         self.molecules[id] = molecule
         self.molecules[id].container = self
@@ -53,7 +53,10 @@ class Model():
         """
         return a generator of all molecules.
         """
-        pass
+        for m in self.molecules:
+            yield self.molecules[m]
+
+
 
     def getAverageCoords(self):
         """

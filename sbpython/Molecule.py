@@ -11,9 +11,9 @@ class Molecule():
             self.residues = {}         #if None, cerat a empty dict
         else:
             self.residues = residues
-        self.name = name               #residue name, str, eg., 'M1'
+        self.name = ''                #molecule name, str, eg., 'M1'
         self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
-        self.id = str(self.container)+self.name
+        self.id = ''
         
     def __str__(self):
         return self.id
