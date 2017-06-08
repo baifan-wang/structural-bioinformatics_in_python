@@ -11,10 +11,10 @@ class Residue():
         self.name = name                #residue name, str, eg., 'AlA'
         self.chain_id = chain_id        #chain id, str, single letter,
         if atoms == None:               #atoms should be a dict, deafult is None
-            self.atoms = {}
+            self._atoms = {}
         else:
-            self.atoms = atoms             #if a dict contains Atom objects is suplied,
-            for a in self.atoms.values():  #set the container of Atom objects to self.
+            self._atoms = atoms             #if a dict contains Atom objects is suplied,
+            for a in self._atoms.values():  #set the container of Atom objects to self.
                 a.container = self
         self.id = self.chain_id+str(self.serial)  #an id to identificate this residue
 
@@ -33,17 +33,17 @@ class Residue():
         """
         return the number of atoms in this residue.
         """
-        return len(self.atoms)
+        return len(self._atoms)
 
     def __contains__(self, atom):
         """
         True if there is a atom in this reidue.
         """
-        return (atom in self.atoms.values())
+        return (atom in self._atoms.values())
 
     def get_atom(self):
-        for a in self.atoms:
-            yield self.atoms[a]
+        for a in self._atoms:
+            yield self._atoms[a]
 
     def add(self, atom):
         """
@@ -54,26 +54,26 @@ class Residue():
         atname = atname.replace("'", "_")  #use the '_' to replace " ' "
         if atname in self:
             raise ValueError("Atom %s defined twice in residue %s" % (atname, self))
-        self.atoms[atname] = atom
-        self.atoms[atname].container = self
+        self._atoms[atname] = atom
+        self._atoms[atname].container = self
 
     def __getattr__(self, args):
-        if args in self.atoms:
-            return self.atoms[args]
+        if args in self._atoms:
+            return self._atoms[args]
         else:
             raise AttributeError('Not such atom in this residue!')
 
     def atom_list(self):
-        a = sorted(self.atoms[i].serial for i in self.atoms)
+        a = sorted(self._atoms[i].serial for i in self._atoms)
         return a
 
     def coordinates(self):
         """
         return the coordinates of this residue.
         """
-        c= [i[0] for i in sorted([(self.atoms[i].coord, self.atoms[i].serial) for i in self.atoms],key=lambda x:x[1])]
+        c= [i[0] for i in sorted([(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms],key=lambda x:x[1])]
         #looks ugly, there should be a better way
-        #c = [(self.atoms[i].coord, self.atoms[i].serial) for i in self.atoms]
+        #c = [(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms]
         #c = sorted(c, key=lambda x:x[1])
         #c = [i[0] for i in c]
         return np.array(c)
