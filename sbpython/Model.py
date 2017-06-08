@@ -6,9 +6,9 @@ class Model():
     """
     def __init__(self, molecules=None):
         if molecules == None:
-            self.molecules = {}
+            self._molecules = {}
         else:
-            self.molecules = molecules
+            self._molecules = molecules
         self.id='model'
 
     def __str__(self):
@@ -20,15 +20,15 @@ class Model():
         """
         Return the number of conformations in this molecule.
         """
-        return len(self.molecules)
+        return len(self._molecules)
 
     def __getattr__(self, args):
         """
         Enable the access Atom, Residue and Molecule in Model object with the following syntax:
         Model.Molecule.chian+Residue_sreial.Atom_name, e.g.: protein1.M1.A12.CA, protein1.M2.
         """
-        if args in self.molecules: 
-            return self.molecules[args]
+        if args in self._molecules: 
+            return self._molecules[args]
         else:
             raise AttributeError('Not such molecule in this model!')
 
@@ -36,25 +36,25 @@ class Model():
         """
         True if there is a molecule with the given id.
         """
-        id = molecule.id
-        return (id in self.molecules) and (molecule.container == self)
+        return (molecule.id in self._molecules) and (molecule.container is self)
 
     def add_molecule(self, molecule):
-        """Adding a molecule to this molecule.
-        raise KeyError if key conflict.
+        """
+        Adding a molecule to this molecule.
+        raise KeyError if key conflicts.
         """
         id = molecule.id
-        if id in self.molecules:
+        if id in self._molecules:
             raise KeyError("%s is already in this molecule!" %id)
-        self.molecules[id] = molecule
-        self.molecules[id].container = self
+        self._molecules[id] = molecule
+        self._molecules[id].container = self
 
-    def all_molecules(self):
+    def get_molecules(self):
         """
         return a generator of all molecules.
         """
-        for m in self.molecules:
-            yield self.molecules[m]
+        for m in self._molecules:
+            yield self._molecules[m]
 
 
 

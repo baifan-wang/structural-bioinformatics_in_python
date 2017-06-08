@@ -8,9 +8,9 @@ class Molecule():
     def __init__(self, residues=None, name=None, molecule_type=None):
         self.container = ''            #indicate which model this molecule belong to, object
         if residues is None:           #residues should be a dict, deafult is None
-            self.residues = {}         #if None, cerat a empty dict
+            self._residues = {}         #if None, cerat a empty dict
         else:
-            self.residues = residues
+            self._residues = residues
         self.name = ''                #molecule name, str, eg., 'M1'
         self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
         self.id = ''
@@ -26,8 +26,8 @@ class Molecule():
         Enable the access Atom and Residue in this Molecule object with the following syntax:
         Molecule.chian+Residue_sreial.Atom_name, e.g.: M1.A12.CA, M2.B1.
         """
-        if args in self.residues:
-            return self.residues[args]
+        if args in self._residues:
+            return self._residues[args]
         else:
             raise AttributeError('Not such residue in this molecule!')
 
@@ -35,24 +35,24 @@ class Molecule():
         """
         Return the number of residues in this molecule.
         """
-        return len(self.residues)
+        return len(self._residues)
 
     def __contains__(self, residue):
         """
         True if there is a residue in this molecule.
         """
         id = residue.id
-        return (id in self.residues) and (residue.container == self)
+        return (id in self._residues) and (residue.container == self)
 
     def add_residue(self, residue):
         """Adding a residue to this molecule.
         raise KeyError if key conflict.
         """
         id = residue.id
-        if id in self.residues:
+        if id in self._residues:
             raise KeyError("%s is already in this molecule!" %id)
-        self.residues[id] = residue
-        self.residues[id].container = self
+        self._residues[id] = residue
+        self._residues[id].container = self
 
     def get_atoms(self):
         for r in self.get_residues():
@@ -60,11 +60,11 @@ class Molecule():
                 yield r.atoms[a]
 
     def get_residues(self):
-        for r in self.residues:
-            yield self.residues[r]
+        for r in self._residues:
+            yield self._residues[r]
 
     def residue_list(self):
-        r = sorted(i for i in self.residues)
+        r = sorted(i for i in self._residues)
         return r
 
     def coordinates(self):
@@ -73,7 +73,7 @@ class Molecule():
         """
         c = []
         for r in self.residue_list():
-            res = self.residues[r]
+            res = self._residues[r]
             for a in res.coordinates():
                 c.append(a)
         return np.array(c)
