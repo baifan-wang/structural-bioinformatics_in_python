@@ -6,20 +6,23 @@ class Residue():
     Atom objects are stored in a dict named atoms.
     """
     def __init__(self, serial, name, chain_id, atoms=None):
-        self.container = ''            #indicate which molecule this residue belong to, object
+        self._container  = ''            #indicate which molecule this residue belong to, object
         self.serial = serial            #residue serial number, int
         self.name = name                #residue name, str, eg., 'AlA'
         self.chain_id = chain_id        #chain id, str, single letter,
         if atoms == None:               #atoms should be a dict, deafult is None
-            self.atoms = {}
+            self._atoms = {}
         else:
-            self.atoms = atoms             #if a dict contains Atom objects is suplied,
-            for a in self.atoms.values():  #set the container of Atom objects to self.
-                a.container = self
-        self.id = self.chain_id+str(self.serial)  #an id to identificate this residue
+            self._atoms = atoms             #if a dict contains Atom objects is suplied,
+            for a in self._atoms.values():  #set the container of Atom objects to self.
+                a_container  = self
+        self.id = self.chain_id+'.'+self.name+'.'+str(self.serial)  #an id to identificate this residue
 
     def __str__(self):
-        return str(self.container)+self.id
+        if self._container is '':
+            return("Residue object: "+self.id)
+        else:
+            return str(self._container)+self.id
 
     __repr__=__str__
 
@@ -27,23 +30,23 @@ class Residue():
         """
         Check whether this atom and other atom are the same
         """
-        return (self.container == other.container) and (self.id == other.id) and (self.coordinates() == self.coordinates())
+        return (self._container  == other._container ) and (self.id == other.id) and (self.coordinates() == self.coordinates())
 
     def __len__(self):
         """
         return the number of atoms in this residue.
         """
-        return len(self.atoms)
+        return len(self._atoms)
 
     def __contains__(self, atom):
         """
         True if there is a atom in this reidue.
         """
-        return (atom in self.atoms.values())
+        return (atom in self._atoms.values())
 
     def get_atom(self):
-        for a in self.atoms:
-            yield self.atoms[a]
+        for a in self._atoms:
+            yield self._atoms[a]
 
     def add_atom(self, atom):
         """
@@ -52,28 +55,28 @@ class Residue():
         """
         atname = atom.name
         atname = atname.replace("'", "_")  #use the '_' to replace " ' "
-        if atname in self:
+        if atname in self._atoms:
             raise ValueError("Atom %s defined twice in residue %s" % (atname, self))
-        self.atoms[atname] = atom
-        self.atoms[atname].container = self
+        self._atoms[atname] = atom
+        self._atoms[atname]._container = self
 
     def __getattr__(self, args):
-        if args in self.atoms:
-            return self.atoms[args]
+        if args in self._atoms:
+            return self._atoms[args]
         else:
             raise AttributeError('Not such atom in this residue!')
 
     def atom_list(self):
-        a = sorted(self.atoms[i].serial for i in self.atoms)
+        a = sorted(self._atoms[i].serial for i in self._atoms)
         return a
 
     def coordinates(self):
         """
         return the coordinates of this residue.
         """
-        c= [i[0] for i in sorted([(self.atoms[i].coord, self.atoms[i].serial) for i in self.atoms],key=lambda x:x[1])]
+        c= [i[0] for i in sorted([(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms],key=lambda x:x[1])]
         #looks ugly, there should be a better way
-        #c = [(self.atoms[i].coord, self.atoms[i].serial) for i in self.atoms]
+        #c = [(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms]
         #c = sorted(c, key=lambda x:x[1])
         #c = [i[0] for i in c]
         return np.array(c)

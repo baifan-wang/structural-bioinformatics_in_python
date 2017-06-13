@@ -6,7 +6,7 @@ class Atom():
         The Atom object stores atom serial, name, coordinate, element type
         as well as residue name and serial, chain id in which atom belong to.
         parameters, 'atom' should be a list contains the following information"""
-        self.container = ''             #indicate which molecule this atom belong to, object
+        self._container = ''             #indicate which molecule this atom belong to, object
         self.serial =        atom[0]    #atom serial number, int
         self.name =          atom[1]    #atom name, eg. 'CA', string
         self.res_name =      atom[2]    #residues name, eg. 'ALA', sring
@@ -18,10 +18,14 @@ class Atom():
         self.y =             self.coord[1]    #y coordinate, float
         self.z =             self.coord[2]    #z coordinate, float
         self.element =       atom[8]    #type of element, eg. 'C'
-        self.id = self.chain_id+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
+        self.id = self.chain_id+'.'+self.res_name+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
 
     def __str__(self):
-        return('Atom object: '+self.id)
+        if self._container is '':
+            return('Atom object: '+self.id)
+        else:
+            return(str(self._container)+'.'+self.name)
+
 
     __repr__=__str__
 
@@ -29,7 +33,7 @@ class Atom():
         """
         Check whether this atom and other atom are the same
         """
-        return (self.container == other.container) and (self.id == other.id) and (self.coord == other.coord)
+        return (self._container == other._container) and (self.id == other.id) and (self.coord == other.coord)
 
     def distance(self, other):
         """

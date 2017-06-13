@@ -13,10 +13,10 @@ class Molecule():
             self.residues = residues
         self.name = ''                #molecule name, str, eg., 'M1'
         self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
-        self.id = ''
+#        self.id = ''
         
     def __str__(self):
-        return self.id
+        return self.name
 
     __repr__=__str__
 
@@ -42,24 +42,24 @@ class Molecule():
         True if there is a residue in this molecule.
         """
         id = residue.id
-        return (id in self.residues) and (residue.container == self)
+        return (id in self.residues) and (residue._container == self)
 
     def add_residue(self, residue):
         """Adding a residue to this molecule.
         raise KeyError if key conflict.
         """
-        id = residue.id
+        id = residue.chain_id+str(residue.serial)
         if id in self.residues:
             raise KeyError("%s is already in this molecule!" %id)
         self.residues[id] = residue
-        self.residues[id].container = self
+        self.residues[id]._container = self
 
-    def get_atoms(self):
-        for r in self.get_residues():
-            for a in r.atoms:
-                yield r.atoms[a]
+    def get_atom(self):
+        for r in self.get_residue():
+            for a in r.get_atom():
+                yield a
 
-    def get_residues(self):
+    def get_residue(self):
         for r in self.residues:
             yield self.residues[r]
 
