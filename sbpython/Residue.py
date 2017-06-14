@@ -22,7 +22,7 @@ class Residue():
         if self._container is '':
             return("Residue object: "+self.id)
         else:
-            return str(self._container)+self.id
+            return str(self._container)+'.'+self.id
 
     __repr__=__str__
 
@@ -80,3 +80,9 @@ class Residue():
         #c = sorted(c, key=lambda x:x[1])
         #c = [i[0] for i in c]
         return np.array(c)
+
+    def next_residue(self):
+        """
+        return the serial number of next residue.
+        """
+        pass

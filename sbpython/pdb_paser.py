@@ -63,51 +63,6 @@ def pdb_to_atoms(pdb):
             i[-1]=i[1][0]
     return atoms
 
-from Atom import *
-from Molecule import *
-from Residue import *
-from Model import *
 
 
-def atoms_to_model(atoms_list):
-    m = Model()
-    i=0
-    if len(atoms_list)==0:
-        raise ValueError('No coordinates are fould')
-    for atoms in atoms_list:
-        m1 = Molecule()
-        i+=1
-        for a in atoms:
-            key = a[3]+str(a[4]) #chain_id + residue serial
-            atname = a[1]
-            atname = atname.replace("'", "_")  #use the '_' to replace " ' "
-            if key not in m1.residues:
-                m1.residues[key] = Residue(a[4], a[2], a[3])
-                m1.residues[key].atoms[atname] = Atom(a)
-            else:
-                m1.residues[key].atoms[atname] = Atom(a)
-        m1.id = 'm'+str(i)
-        m.add_molecule(m1)
-    return m
 
-'''
-def atoms_to_model(atoms_list):
-    m = Model()
-    i=0
-    if len(atoms_list)==0:
-        raise ValueError('No coordinates are fould')
-    for atoms in atoms_list:
-        m1 = Molecule()
-        i+=1
-        for a in atoms:
-            key = a[3]+str(a[4]) #chain_id + residue serial
-            atname = a[1]
-            atname = atname.replace("'", "_")  #use the '_' to replace " ' "
-            if key not in m1.residues:
-                m1.residues[key] = Residue(a[4], a[2], a[3])
-                m1.residues[key].atoms[atname] = Atom(a)
-            else:
-                m1.residues[key].atoms[atname] = Atom(a)
-        m.molecules['m'+str(i)] = m1
-    return m
-'''
