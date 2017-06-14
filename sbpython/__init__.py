@@ -5,6 +5,8 @@ from .Residue import *
 from .Model import *
 from .pdb_paser import *
 from .Geometry import *
+from .Interaction import *
+from .SVDSuperimposer import *
 #from .atoms_to_model import *
 
 def atoms_to_model(atoms_list):
