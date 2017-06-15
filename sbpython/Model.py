@@ -62,6 +62,16 @@ class Model():
         for m in self._molecules:
             yield self._molecules[m]
 
+    def write_pdb(self, pdb):
+        with open(pdb, 'w') as f:
+            i = 1
+            for molecule in self.get_molecule():
+                f.write('MODEL       '+str(i)+'\n')
+                for atom in molecule.get_atom():
+                    f.write(atom.to_pdb()+'\n')
+                f.write('TER     \n')
+                f.write('ENDMDL\n')
+                i+=1
 
     def getAverageCoords(self):
         """

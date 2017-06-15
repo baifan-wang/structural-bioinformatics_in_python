@@ -126,3 +126,11 @@ class Molecule():
             print("This molecule type: %s doesn't have a defined backbone atom." %molecule_type)
             return None
         return np.array(coordinate)
+
+    def write_pdb(self, pdb):
+        with open(pdb, 'w') as f:
+            f.write('MODEL       1\n')
+            for atom in self.get_atom():
+                f.write(atom.to_pdb()+'\n')
+            f.write('TER     \n')
+            f.write('ENDMDL\n')
