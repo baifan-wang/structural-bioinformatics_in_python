@@ -7,6 +7,7 @@ from .pdb_paser import *
 from .Geometry import *
 from .Interaction import *
 from .Superimposer import *
+from .Structural_analysis import *
 #from .atoms_to_model import *
 
 def atoms_to_model(atoms_list):

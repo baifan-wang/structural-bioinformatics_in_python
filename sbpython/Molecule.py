@@ -1,4 +1,5 @@
 import numpy as np
+from .Atom import *
 class Molecule():
     """
     Create Molecule object.
@@ -68,6 +69,9 @@ class Molecule():
         for r in self._residues:
             yield self._residues[r]
 
+    def get_residue_by_id(self, residue_id):
+        return self._residues[residue_id]
+
     def residue_list(self):
         r = sorted(i for i in self._residues)
         return r
@@ -83,7 +87,7 @@ class Molecule():
                 c.append(a)
         return np.array(c)
 
-    def subset_atoms(self, residue, mask):
+    def subset_atoms(self, chain='A',residue_resial=None, residue_name=None, atom_serial=None, atom_name=None):
         """
         return a subset of atoms define by te mask, such as backbone.
         """
@@ -93,7 +97,9 @@ class Molecule():
         """
         return the average position of all atoms.
         """
-        pass
+        center_coord = sum(self.coordinates())/len(self.coordinates())
+        a = Dummy('Center of '+self.name, center_coord)
+        return a
 
     def mass_center(self):
         """

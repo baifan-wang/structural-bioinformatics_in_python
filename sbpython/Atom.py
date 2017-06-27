@@ -191,24 +191,25 @@ class Dummy(Atom):
     def __str__(self):
         return('Dummy atom object: %s' %self.name)
 
-    def to_pdb(self, serial, res_serial, res_name='MOL', chian_id='A', element='X'):
-        """res_serial
-        return a PDB format line.
-        extra information must be provided.
+    def to_pdb(self, serial, res_serial, res_name='MOL', chain_id='A', element='X'):
         """
+        return a PDB format line.
+        extra information such atom serial and res_serial must be provided.
+        """
+        self.serial = serial
+        self.res_serial = res_serial
+        self.res_name = res_name
+        self.chain_id = chain_id
         self.character = 'ATOM'
         self.alter_local_indicater = ''
         self.code_for_insertions_of_residues = ''
         self.occupancy = 1.00
         self.temp_factor = 0.00
         self.segment_indent = ''
-        self.element = ''
+        self.element = element
         self.charge = ''
 
-        if len(self.name) <4:
-            atom_name=(' '+self.name).ljust(4)
-        else:
-            atom_name=self.name.ljust(4)
+        atom_name='X'.ljust(4)
         s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
                 % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \

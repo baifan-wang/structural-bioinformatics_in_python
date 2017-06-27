@@ -13,7 +13,7 @@ def vector_prod(a, b):
     return res
 
 
-def distance(c1, c2):
+def get_distance(c1, c2):
     """
     Compute the distance between point c1 and c2
     """
@@ -24,7 +24,7 @@ def distance(c1, c2):
     d = c2 - c1
     return np.sqrt(np.sum(d*d))
 
-def angle(c1, c2, c3):
+def get_angle(c1, c2, c3):
     """
     Compute the angel between point c1, c2 and c3
     """
@@ -56,7 +56,7 @@ def vector_angle(a, b):
         sca = 1.0
     return np.arccos(sca)*180/np.pi
 
-def torsion(c1, c2, c3, c4):
+def get_torsion(c1, c2, c3, c4):
     """
     Compute the torsion angle between c1, c2, c3, c4.
     All coordinates are cartesian; result is in degrees.
@@ -101,7 +101,7 @@ def torsion(c1, c2, c3, c4):
     return tang
 
 
-def plane(p1, p2, p3):
+def get_plane(p1, p2, p3):
     """ 
     a = (p2.y-p1.y)*(p3.z-p1.z)-(p2.z-p1.z)*(p3.y-p1.y)
     b = (p2.z-p1.z)*(p3.x-p1.x)-(p2.x-p1.x)*(p3.z-p1.z)
