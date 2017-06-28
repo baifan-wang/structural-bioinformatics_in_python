@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import sys,os
 import time
 
-def plot_wheel(torsion, title, filename, abz=True):
+def plot_torsion_wheel(angles, title, filename, abz=True):
 
     t1 = time.time()
     label = [r'$\alpha$', r'$\beta$', r'$\gamma$', r'$\delta$', r'$\epsilon$', r'$\zeta$', r'$\chi$']
@@ -21,28 +21,31 @@ def plot_wheel(torsion, title, filename, abz=True):
     ax1.grid(True, lw=1, linestyle='-', color='black') # to change properties of radial and circular grid-line from dashed to solid
     ax1.spines["polar"].set_visible(False)
 
-    angles = torsion[:][:-1]                       #remove the last column, which is type of chi
+
     hist_idx = np.arange(0, 360, 1, dtype=np.int)  # Initializing histogram array over 360 Deg using bin-size of 1
     bins = 360
     angle_hist = np.zeros((7,360), dtype=np.int)
+
     # the observed torsion angle range for A, B and Z DNA. taken from
     a_range = [(180,190,260,320),(140,220),(30,80,140,160),(60,100),(160,250),(250,320),(160,250)]
     b_range = [(270,330),(130,200),(20,80),(70,180),(160,270),(150,210,230,300),(200,300)]
     z_range = [(40,100,150,250),(150,250),(20,90,160,210),(80,160),(180,300),(40,100,280,340),(50,90,180,220)]
+
+    
     for x in range(7):
-        for i,l in zip([a_range,b_range,z_range],[1,2,4]):
-            a = 0
-            while a <len(i[x]):
-                for y in range(i[x][a],i[x][a+1]+1):
-                    angle_hist[x][y-1]+=l  # The value in angle_hist from A,B,Z are set to 1,2,4,respectively
-                                           # the value in overlap part are the sum of the overlap.
-                a+=2
+        if abz == True:
+            for i,l in zip([a_range,b_range,z_range],[1,2,4]):
+                a = 0
+                while a <len(i[x]):
+                    for y in range(i[x][a],i[x][a+1]+1):
+                        angle_hist[x][y-1]+=l  # The value in angle_hist from A,B,Z are set to 1,2,4,respectively
+                                               # the value in overlap part are the sum of the overlap.
+                    a+=2
         for l in angles[x]:
             if l is not None:
                 angle_hist[x][int(l)-1]=10  # The value in angle_hist from torsion are set to 10
-    # In the further the angle_hist contains range data can be written in a file, then we don't need to calculate the angle_hist every time.
-    # Creating array for color-range
 
+    print("Plotting...")
     width = np.pi/180  # Width of bin in radian
     color_dict = {1:'yellow', 2:'blue', 3:'green', 4:'red', 5:'orange', 6:'magenta', 7:'cyan'}
     for i in range(len(angle_hist)):
@@ -72,13 +75,13 @@ def plot_wheel(torsion, title, filename, abz=True):
 
     # At last change the fontsize
     ax1.set_rlabel_position(0)  #set the position of the angle label using angle as coordinate
-    ax1.xaxis.grid(True, alpha = 0.8)  #turn off the radial grids.
+    ax1.xaxis.grid(True, alpha = 0.1)  #turn on the radial grids.
     ax1.xaxis.set_ticklabels(xlabel, fontsize=18)
 
     # Clean memory
     del angles
 
     #plt.show()
-    fig.savefig(filename, dpi=72,bbox_inches='tight')
+    fig.savefig(filename, dpi=180, bbox_inches='tight')
     t2 = time.time()
-    print('Total time used :%2f s' %(t2-t1))
+    print('\nTotal time used :%2f s' %(t2-t1))
