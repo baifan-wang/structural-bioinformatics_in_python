@@ -47,7 +47,11 @@ def pdb_to_atoms(pdb):
     for line in lines:
         identifier = line[:6]
         if identifier in identifiers:
-            atoms[model_num].append([int(line[6:11]), line[11:16].strip(" "),  line[17:21].strip(" "), line[21],\
+            if line[21] == ' ':
+                chain_id = 'A'
+            else:
+                chain_id = line[21]
+            atoms[model_num].append([int(line[6:11]), line[11:16].strip(" "),  line[17:21].strip(" "), chain_id,\
              int(line[22:26]), float(line[30:38]), float(line[38:46]), float(line[46:54]), line[76:78].strip(' ')])
             #atoms: atom_serial, atom_name, residue_name, chain_id, residue_serial, x, y, z, element_type 
             #          0              1        2            3           4           5  6  7   8

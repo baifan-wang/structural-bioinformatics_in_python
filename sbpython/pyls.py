@@ -10,17 +10,17 @@ class ls():
                 raise TypeError("'%s' is not a directory" %self.dir)
 
     def all_files(self):
-        return [os.path.join(self.dir,x) for x in os.listdir(self.dir) \
-        if os.path.isfile(os.path.join(self.dir,x))]
+        return sorted([os.path.join(self.dir,x) for x in os.listdir(self.dir) \
+        if os.path.isfile(os.path.join(self.dir,x))])
 
     def all_specified_files(self, file_extenstion):
         fe = file_extenstion
-        return [os.path.join(self.dir,x) for x in os.listdir(self.dir) \
-        if os.path.isfile(os.path.join(self.dir,x)) and os.path.splitext(x)[1]==fe]
+        return sorted([os.path.join(self.dir,x) for x in os.listdir(self.dir) \
+        if os.path.isfile(os.path.join(self.dir,x)) and os.path.splitext(x)[1]==fe])
 
     def all_folders(self):
-        return [os.path.join(self.dir,x) for x in os.listdir(self.dir) \
-        if os.path.isdir(os.path.join(self.dir,x))]
+        return sorted([os.path.join(self.dir,x) for x in os.listdir(self.dir) \
+        if os.path.isdir(os.path.join(self.dir,x))])
 
     def __getattr__(self, args):
         if args == 'all':
