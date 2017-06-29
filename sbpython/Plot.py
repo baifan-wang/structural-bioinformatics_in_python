@@ -112,10 +112,10 @@ def plot_phi_psi(torsion, title, filename):
 
     ax1.set_xticklabels(major_ticks, fontsize=12)
     ax1.set_yticklabels(major_ticks, fontsize=12)
-    plt.plot(phi, psi, marker='s', linewidth=0, markersize=5)
+    plt.plot(phi, psi, marker='s', linewidth=0, markersize=3)
 
     fig.savefig(filename, dpi=180, bbox_inches='tight')
 
     t2 = time.time()
-    print('\nTotal time used :%2f s' %(t2-t1))
+    print('Total time used :%2f s' %(t2-t1))
     pass

@@ -7,9 +7,19 @@ def get_residues(molecule, chain_id, residue_range):
     for c in chain_id:
         for i in range(residue_range[0],residue_range[1]+1):
             residue_id = c+str(i)
-            residues.append(molecule.get_residue_by_id(residue_id))
+            residue = molecule.get_residue_by_id(residue_id)
+            if residue is not None:
+                residues.append(residue)
     return residues
 
+def strip_none_form_torsion(torsion):
+    new_torsion = []
+    for i in torsion:
+        if None in i:
+            pass
+        else:
+            new_torsion.append(i)
+    return new_torsion
 
 def nucleic_acid_torsion(molecule, chain_id, residue_range):
     """ 
@@ -30,12 +40,18 @@ def nucleic_acid_torsion(molecule, chain_id, residue_range):
             if i-1 ==-1:
                 alpha = None
                 beta = None
+            elif r[i-1].res_serial+1 != r[i].res_serial:
+                alpha = None
+                alpha = None
             else:
                 alpha = get_torsion(r[i-1].O3_, r[i].P, r[i].O5_, r[i].C5_)
                 beta = get_torsion(r[i].P, r[i].O5_, r[i].C5_, r[i].C4_)
             gamma = get_torsion(r[i].O5_, r[i].C5_, r[i].C4_, r[i].C3_)
             delta = get_torsion(r[i].C5_, r[i].C4_, r[i].C3_, r[i].O3_)
             if i+1 == len(r):
+                epsilon = None
+                zeta = None
+            elif r[i].res_serial+1 != r[i+1].res_serial:  #deal with missing residues
                 epsilon = None
                 zeta = None
             else:
@@ -47,7 +63,7 @@ def nucleic_acid_torsion(molecule, chain_id, residue_range):
                 chi = get_torsion(r[i].O4_,r[i].C1_,r[i].N1,r[i].C2)
             else:
                 chi = None
-            torsion.append([alpha, beta, gamma, delta, epsilon, zeta,chi])
+            torsion.append([r[i].res_serial, alpha, beta, gamma, delta, epsilon, zeta, chi])
     except KeyError:
         pass
     return torsion
@@ -91,7 +107,7 @@ def nucleic_acid_pucker(molecule, chain_id, residue_range):
         for x in ps:
             if ps[x][0] <=P <= ps[x][1]:
                 break
-            pucker.append([v0,v1,v2,v3,v4,tm,P,x])
+            pucker.append([r[i].res_serial, v0,v1,v2,v3,v4,tm,P,x])
     return pucker
 
 def protein_tosion(molecule, chain_id, residue_range):
@@ -104,11 +120,15 @@ def protein_tosion(molecule, chain_id, residue_range):
     for i in range(len(r)):
         if i-1 == -1:
             phi = None
+        elif r[i-1].res_serial+1 != r[i].res_serial:  #deal with missing residues
+            phi = None
         else:
             phi = get_torsion(r[i-1].C, r[i].N, r[i].CA, r[i].C)
         if i+1 == len(r):
             psi = None
+        elif r[i].res_serial+1 != r[i+1].res_serial:  #deal with missing residues
+            phi = None
         else:
             psi = get_torsion(r[i].N, r[i].CA, r[i].C, r[i+1].N)
-        torsion.append([phi,psi])
+        torsion.append([r[i].res_serial, phi, psi])
     return torsion

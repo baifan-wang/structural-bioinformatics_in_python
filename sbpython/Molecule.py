@@ -1,5 +1,6 @@
 import numpy as np
 from .Atom import *
+from .Data import *
 class Molecule():
     """
     Create Molecule object.
@@ -111,14 +112,36 @@ class Molecule():
         """
         pass
 
-    def get_sequence(self):
+    def get_sequence(self, chain_id):
         """
         return the sequence of this molecule.
         """
-        sequence = ' '
-        for r in sorted(self._residues.keys()):
-            sequence.join(r)
-        return sequence
+        sequence = []
+        temp_residue = []
+        for r in self._residues:
+            if r[0] == chain_id:
+                temp_residue.append(r)
+        temp_residue = sorted(temp_residue, key = lambda x:int(x[1:]) )
+        for i in temp_residue:
+            residue = self._residues[i]
+            if residue.name in aa_res:
+                sequence.append(aa_res[residue.name])
+        return ''.join(sequence)
+
+    def to_fasta(self, chain_id, fasta_file, comment=None):
+        if comment is None:
+            comment = 'Sequence extract from %s' %self
+        sequence = self.get_sequence(chain_id)
+        header = '>'+self.name+':'+chain_id+"|PDBID|CHAIN|SEQUENCE " + comment
+        with open(fasta_file, 'w') as f:
+            f.write(header+'\n')
+            i = 0
+            l = 80
+            while i<len(sequence):
+                f.write(sequence[i:l]+'\n')
+                i+=80
+                l+=80
+        print('Writing sequence to %s' %fasta_file)
 
     def backbone(self):
         """
