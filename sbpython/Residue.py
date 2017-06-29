@@ -5,9 +5,9 @@ class Residue():
     The Residue object stores residue serial, name, chain id and Atom objects.
     Atom objects are stored in a dict named atoms.
     """
-    def __init__(self, serial, name, chain_id, atoms=None):
+    def __init__(self, res_serial, name, chain_id, atoms=None):
         self._container  = ''            #indicate which molecule this residue belong to, object
-        self.serial = serial            #residue serial number, int
+        self.res_serial = res_serial            #residue serial number, int
         self.name = name                #residue name, str, eg., 'AlA'
         self.chain_id = chain_id        #chain id, str, single letter,
         if atoms == None:               #atoms should be a dict, deafult is None
@@ -16,7 +16,7 @@ class Residue():
             self._atoms = atoms             #if a dict contains Atom objects is suplied,
             for a in self._atoms.values():  #set the container of Atom objects to self.
                 a_container  = self
-        self.id = self.chain_id+'.'+self.name+'.'+str(self.serial)  #an id to identificate this residue
+        self.id = self.chain_id+'.'+self.name+'.'+str(self.res_serial)  #an id to identificate this residue
 
     def __str__(self):
         if self._container is '':

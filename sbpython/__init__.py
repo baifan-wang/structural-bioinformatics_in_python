@@ -18,13 +18,13 @@ def atoms_to_model(atoms_list):
     if len(atoms_list)==0:
         raise ValueError('No coordinates are found')
     for atoms in atoms_list:
-        m1 = Molecule()
-        i+=1
-        m1.name = 'm'+str(i)
-        r1 = Residue(atoms[0][4],atoms[0][2],atoms[0][3])
-        for a in atoms:
-            a1 = Atom(a)
-            if a1.res_serial is r1.serial and a1.chain_id is r1.chain_id:
+        m1 = Molecule()         # creat a Molecule object for each atom list in atoms_list
+        i+=1                    # increasing model number by 1
+        m1.name = 'm'+str(i)    # creat a name for each molecule
+        r1 = Residue(atoms[0][4],atoms[0][2],atoms[0][3])  #create first residue from first atom.
+        for a in atoms:         # for each line in atoms, which is a list
+            a1 = Atom(a)        # create an Atom object form a list
+            if a1.res_serial == r1.res_serial and a1.chain_id == r1.chain_id:
                 r1.add_atom(a1)
             else:
                 m1.add_residue(r1)

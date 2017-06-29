@@ -49,11 +49,11 @@ class Model():
         Adding a molecule to this molecule.
         raise KeyError if key conflicts.
         """
-        id = molecule.name
-        if id in self._molecules:
-            raise KeyError("%s is already in this molecule!" %id)
-        self._molecules[id] = molecule
-        self._molecules[id]._container = self
+        m_id = molecule.name
+        if m_id in self._molecules:
+            raise KeyError("%s is already in this molecule!" %m_id)
+        self._molecules[m_id] = molecule
+        self._molecules[m_id]._container = self
 
     def get_molecule(self):
         """

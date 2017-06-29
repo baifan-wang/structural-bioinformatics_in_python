@@ -85,3 +85,37 @@ def plot_torsion_wheel(angles, title, filename, abz=True):
     fig.savefig(filename, dpi=180, bbox_inches='tight')
     t2 = time.time()
     print('\nTotal time used :%2f s' %(t2-t1))
+
+
+def plot_phi_psi(torsion, title, filename):
+    t1 = time.time()
+
+    phi = [i[0] for i in torsion]
+    psi = [i[1] for i in torsion]
+    fig = plt.figure(figsize=(7, 7), dpi=300)
+    fig.subplots_adjust(wspace=0.3)     # To adjust gaps and margins of subplots
+
+    ax1 = plt.subplot(111)  # create a ploar plot
+    ax1.set_title(title, fontsize=22)  # set the title of the plot
+    ax1.set_xlim((-180,180))
+    ax1.set_ylim((-180,180))
+    ax1.set_xlabel('Phi (degrees)',fontsize=14)
+    ax1.set_ylabel('Psi (degrees)',fontsize=14)
+    major_ticks = [-180,-135,-90,-45,0,45,90,135,180]
+    minor_ticks = [0]
+
+    ax1.set_xticks(major_ticks)
+    ax1.set_xticks(minor_ticks, minor=True)
+    ax1.set_yticks(major_ticks)
+    ax1.set_yticks(minor_ticks, minor=True)
+    ax1.grid(which='minor', linestyle = '--', linewidth = 1)
+
+    ax1.set_xticklabels(major_ticks, fontsize=12)
+    ax1.set_yticklabels(major_ticks, fontsize=12)
+    plt.plot(phi, psi, marker='s', linewidth=0, markersize=5)
+
+    fig.savefig(filename, dpi=180, bbox_inches='tight')
+
+    t2 = time.time()
+    print('\nTotal time used :%2f s' %(t2-t1))
+    pass

@@ -47,18 +47,19 @@ class Molecule():
         """
         True if there is a residue in this molecule.
         """
-        id = residue.chain_id+str(residue.serial)
-        return (id in self._residues) and (residue._container == self)
+        r_id = residue.chain_id+str(residue.res_serial)
+        return (r_id in self._residues) and (residue._container == self)
 
     def add_residue(self, residue):
-        """Adding a residue to this molecule.
+        """
+        Adding a residue to this molecule.
         raise KeyError if key conflict.
         """
-        id = residue.chain_id+str(residue.serial)
-        if id in self._residues:
-            raise KeyError("%s is already in this molecule!" %id)
-        self._residues[id] = residue
-        self._residues[id]._container = self
+        r_id = residue.chain_id+str(residue.res_serial)
+        if r_id in self._residues:
+            raise KeyError("%s is already in this molecule!" %r_id)
+        self._residues[r_id] = residue
+        self._residues[r_id]._container = self
 
     def get_atom(self):
         for r in self.get_residue():
@@ -70,7 +71,10 @@ class Molecule():
             yield self._residues[r]
 
     def get_residue_by_id(self, residue_id):
-        return self._residues[residue_id]
+        if residue_id in self._residues:
+            return self._residues[residue_id]
+        else:
+            pass
 
     def residue_list(self):
         r = sorted(i for i in self._residues)
@@ -111,7 +115,10 @@ class Molecule():
         """
         return the sequence of this molecule.
         """
-        pass
+        sequence = ' '
+        for r in sorted(self._residues.keys()):
+            sequence.join(r)
+        return sequence
 
     def backbone(self):
         """
@@ -129,7 +136,7 @@ class Molecule():
                 if a.name in nucleic_acid_bb:
                     coordinate.append(a.coord)
         else:
-            print("This molecule type: %s doesn't have a defined backbone atom." %molecule_type)
+            print("This molecule type: %s doesn't have defined backbone atoms." %molecule_type)
             return None
         return np.array(coordinate)
 
