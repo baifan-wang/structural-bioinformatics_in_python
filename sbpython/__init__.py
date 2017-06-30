@@ -10,6 +10,7 @@ from .Superimposer import *
 from .Structural_analysis import *
 from .pyls import *
 from .Plot import *
+from .Alignment import *
 #from .atoms_to_model import *
 
 def atoms_to_model(atoms_list):
