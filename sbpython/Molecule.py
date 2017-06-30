@@ -7,7 +7,7 @@ class Molecule():
     The Molecule object stores Residue objects.
     Residue objects are stored in a dict named residues.
     """
-    def __init__(self, residues=None, name=None, molecule_type=None):
+    def __init__(self, residues=None, name=None, molecule_type='protein'):
         self._container = ''            #indicate which model this molecule belong to, object
         if residues is None:           #residues should be a dict, deafult is None
             self._residues = {}         #if None, cerat a empty dict
@@ -143,7 +143,7 @@ class Molecule():
                 l+=80
         print('Writing sequence to %s' %fasta_file)
 
-    def backbone(self):
+    def get_backbone_coords(self):
         """
         return coordinate of backbone atoms of this molecule.
         """
@@ -170,3 +170,8 @@ class Molecule():
                 f.write(atom.to_pdb()+'\n')
             f.write('TER     \n')
             f.write('ENDMDL\n')
+
+    def update_atomic_coodinates(self, rotation, translation):
+        for r in self._residues.values():
+            for a in r._atoms.values():
+                a.transform(rotation, translation)

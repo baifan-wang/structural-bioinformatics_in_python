@@ -55,5 +55,6 @@ def alignment_mapping(aligned_seqs):
                 res_serial = aligned_seqs[s][1]
             if alignment[i] == '*':
                 align_seq_serial.append(res_serial)
+    del aligned_seqs[seqs[0]]
     return aligned_seqs
 

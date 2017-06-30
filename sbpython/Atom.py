@@ -152,7 +152,7 @@ class Atom():
         s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
                 % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
-                self.x , self.y , self.z , self.occupancy ,\
+                self.coord[0] , self.coord[1] , self.coord[2] , self.occupancy ,\
                 self.temp_factor , self.segment_indent.ljust(4) , \
                 self.element.rjust(2) , self.charge)
         return s
@@ -160,20 +160,10 @@ class Atom():
     def transform(self, rotation, translation):
         """
         Apply rotation and translation to the atomic coordinates.
-
-        Example:
-                >>> rotation=rotmat(pi, Vector(1, 0, 0))
-                >>> translation=array((0, 0, 1), 'f')
-                >>> atom.transform(rotation, translation)
-
-        @param rot: A right multiplying rotation matrix
-        @type rot: 3x3 Numeric array
-
-        @param tran: the translation vector
-        @type tran: size 3 Numeric array
+        rotation: A right multiplying rotation matrix, 3x3 np array
+        translation: the translation vector, 1x3 np array
         """
-        self.coord = numpy.dot(self.coord, rot) + tran
-
+        self.coord = np.dot(self.coord, rotation) + translation
 
 class Dummy(Atom):
     """
