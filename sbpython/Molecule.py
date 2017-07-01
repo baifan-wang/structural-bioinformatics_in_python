@@ -100,7 +100,7 @@ class Molecule():
 
     def center(self):
         """
-        return the average position of all atoms.
+        return the average position of all atoms and pack into a Dummt atom object.
         """
         center_coord = sum(self.coordinates())/len(self.coordinates())
         a = Dummy('Center of '+self.name, center_coord)
@@ -172,6 +172,10 @@ class Molecule():
             f.write('ENDMDL\n')
 
     def update_atomic_coodinates(self, rotation, translation):
-        for r in self._residues.values():
-            for a in r._atoms.values():
-                a.transform(rotation, translation)
+        """
+        update the coordinates of each atom in this molecule
+        with the rotation matrix and translation vector.
+        """
+        for a in self.get_atom():
+            a.transform(rotation, translation)
+

@@ -13,9 +13,6 @@ class Atom():
         self.res_serial =    atom[4]    #residue serial number, int
         self.coord =         np.array(atom[5:8]) #x, y, z coordinates of atom, [float]
         assert self.coord.shape == (3, )
-        self.x =             self.coord[0]    #x coordinate, float
-        self.y =             self.coord[1]    #y coordinate, float
-        self.z =             self.coord[2]    #z coordinate, float
         self.element =       atom[8]    #type of element, eg. 'C'
         self.id = self.chain_id+'.'+self.res_name+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
 
@@ -24,7 +21,6 @@ class Atom():
             return('Atom object: '+self.id)
         else:
             return(str(self._container)+'.'+self.name)
-
 
     __repr__=__str__
 
@@ -119,7 +115,8 @@ class Atom():
     def plane(self, other2, other3):
         """
         Compute the function of plane defined by self, other2, other3.
-        the norm of a plane is (a,b,c)"""
+        the norm of a plane is (a,b,c)
+        """
         assert other2.coord.shape == (3, )
         assert other3.coord.shape == (3, )
 
@@ -128,10 +125,6 @@ class Atom():
         c = (other2.x-self.x)*(other3.y-self.y)-(other2.y-self.y)*(other3.x-self.x)
         d = (0-(a*self.x+b*self.y+c*self.z))
         return (a,b,c,d)
-
-    def move(self, direction, distance):
-        """move atom to the direction with distance, will change its coordinates."""
-        pass
 
     def to_pdb(self):
         """

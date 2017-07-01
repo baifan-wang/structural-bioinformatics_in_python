@@ -1,3 +1,5 @@
+
+
 def alignment_loader(alignment_file):
     """
     load the file and return the lines in this file.
