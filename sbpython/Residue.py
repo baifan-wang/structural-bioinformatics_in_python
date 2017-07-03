@@ -81,8 +81,7 @@ class Residue():
         #c = [i[0] for i in c]
         return np.array(c)
 
-    def get_backbone_coordinates(self, mask=('N','CA','C',"P","O5'","C5'","C4'","C3'","O3'")):
-        bb_coords = []
+    def bb_coordinates(self, mask=('N','CA','C',"P","O5'","C5'","C4'","C3'","O3'")):
         for a in self._atoms.values():
             if a.name in mask:
                 yield a.coord

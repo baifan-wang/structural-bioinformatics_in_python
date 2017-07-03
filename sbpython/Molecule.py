@@ -128,7 +128,7 @@ class Molecule():
                 sequence.append(aa_res[residue.name])
         return ''.join(sequence)
 
-    def to_fasta(self, chain_id, fasta_file, comment=None):
+    def write_fasta(self, chain_id, fasta_file, comment=None):
         if comment is None:
             comment = 'Sequence extract from %s' %self
         sequence = self.get_sequence(chain_id)
@@ -143,7 +143,7 @@ class Molecule():
                 l+=80
         print('Writing sequence to %s' %fasta_file)
 
-    def get_backbone_coords(self):
+    def get_bb_coords(self):
         """
         return coordinate of backbone atoms of this molecule.
         """
