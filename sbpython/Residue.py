@@ -1,5 +1,5 @@
 import numpy as np
-class Residue():
+class Residue:
     """
     Create Residue object.
     The Residue object stores residue serial, name, chain id and Atom objects.

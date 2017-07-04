@@ -132,3 +132,18 @@ def protein_tosion(molecule, chain_id, residue_range):
             psi = get_torsion(r[i].N, r[i].CA, r[i].C, r[i+1].N)
         torsion.append([r[i].res_serial, phi, psi])
     return torsion
+
+
+def get_NOE(M1, M2, key='all'):
+    peak_intense = {'all':[0,6.5], 'weak':[3.5,6.5],'medium':[2.6,5.0], 'strong':[1.8,3.6]}
+    lcutoff = peak_intense[key][0]
+    hcutoff = peak_intense[key][1]
+    NOE = []
+    for a1 in M1.get_atom():
+        if a1.element == 'H':
+            for a2 in M2.get_atom():
+                if a2.element == 'H':
+                    distance = get_distance(a1, a2)
+                    if lcutoff<= distance <=hcutoff:
+                        NOE.append([a1.id,a2.id,distance])
+    return NOE

@@ -1,5 +1,6 @@
 import numpy as np
-class Model():
+from .Structural_alignment import *
+class Model:
     """
     Creat Model object.
     The Model object stores Molecule objects, i.e., the conformation(s) of a molecule or complex.
@@ -77,12 +78,4 @@ class Model():
         """
         Compute the average coords of the alternate locations of an atom.
         """
-        if self.alternate != []:
-            # get the alternate coords.
-            coords = [self.coords,] + self.alternate.coords
-            # compute the average as a list of coords.
-            avCoords = (sum(coords)/len(coords)).tolist()
-        else:
-            # only one coords.
-            avCoords = self.coords
-        return avCoords
+        pass
