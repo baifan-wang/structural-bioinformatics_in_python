@@ -18,7 +18,7 @@ class Molecule():
         self.name = 'm1'                #molecule name, str, eg., 'M1'
         self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
 #        self.id = ''
-        
+        self.serial = ''
     def __str__(self):
         if self._container is '':
             return("Molecule object: "+self.name)
@@ -42,10 +42,14 @@ class Molecule():
         """
         Return the number of residues and atoms in this molecule.
         """
+
+        return len(self._residues)
+
+    def get_atom_num(self):
         atom_num = 0
         for r in self._residues:
-            atom_num+=len(r)
-        return (len(self._residues), atom_num)
+            atom_num+=len(self._residues[r])
+        return atom_num
 
     def __contains__(self, residue):
         """
@@ -65,14 +69,18 @@ class Molecule():
         self._residues[r_id] = residue
         self._residues[r_id]._container = self
 
+    def _sorted_residue_list(self):
+        return sorted([i for i in self._residues], \
+            key=lambda x:self._residues[x].serial)
+
+    def get_residue(self):
+        for r in self._sorted_residue_list():
+            yield self._residues[r]
+
     def get_atom(self):
         for r in self.get_residue():
             for a in r.get_atom():
                 yield a
-
-    def get_residue(self):
-        for r in self._residues:
-            yield self._residues[r]
 
     def get_residue_by_id(self, residue_id):
         if residue_id in self._residues:
@@ -190,3 +198,15 @@ class Molecule():
       for a in self.get_atom():
         mw += atomic_weight[a.element]
       return mw
+
+    def get_dist_matrix(self):
+        """
+        Compute the complete inter-atomic distance matrix, which has order of n2 time complexity!
+        """
+        atom_num = self.get_atom_num()
+        self.dist_matrix = np.zeros((atom_num, atom_num)) #creat a zeroed atom_num*atom_num array
+        for a1 in self.get_atom():
+            i = a1.serial-1
+            for a2 in self.get_atom():
+                j = a2.serial-1
+                self.dist_matrix[i,j] = a1.distance(a2)
