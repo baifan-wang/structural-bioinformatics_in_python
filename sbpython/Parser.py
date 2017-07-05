@@ -36,7 +36,7 @@ def file_loader(file):
         raise
     return lines
 
-def pdb_to_atoms(pdb):
+def pdb_parser(pdb):
     """
     Read a pdb, and return a list contains information for each atom in pdb.
     atoms: store all of lines contain coordinates in pdb.
@@ -69,4 +69,4 @@ def pdb_to_atoms(pdb):
 
 
 
-
+parsers = {'pdb':pdb_parser}

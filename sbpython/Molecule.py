@@ -40,9 +40,12 @@ class Molecule():
 
     def __len__(self):
         """
-        Return the number of residues in this molecule.
+        Return the number of residues and atoms in this molecule.
         """
-        return len(self._residues)
+        atom_num = 0
+        for r in self._residues:
+            atom_num+=len(r)
+        return (len(self._residues), atom_num)
 
     def __contains__(self, residue):
         """
@@ -179,3 +182,11 @@ class Molecule():
         for a in self.get_atom():
             a.transform(rotation, translation)
 
+    def mw(self):
+      """
+      Returns molecular weight
+      """
+      mw = 0
+      for a in self.get_atom():
+        mw += atomic_weight[a.element]
+      return mw

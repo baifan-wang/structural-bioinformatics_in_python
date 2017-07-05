@@ -14,7 +14,7 @@ class Atom:
         self.coord =         np.array(atom[5:8]) #x, y, z coordinates of atom, [float]
         assert self.coord.shape == (3, )
         self.element =       atom[8]    #type of element, eg. 'C'
-        self.id = self.chain_id+'.'+self.res_name+'.'+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
+        self.id = self._container+self.chain_id+'.'+self.res_name+'.'+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
 
     def __str__(self):
         if self._container is '':

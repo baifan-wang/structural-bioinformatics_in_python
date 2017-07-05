@@ -1,9 +1,10 @@
 import numpy as np
+import os
 from .Atom import *
 from .Molecule import *
 from .Residue import *
 from .Model import *
-from .pdb_paser import *
+from .Parser import *
 from .Geometry import *
 from .Interaction import *
 from .Superimposer import *
@@ -35,3 +36,16 @@ def atoms_to_model(atoms_list):
         m1.add_residue(r1)
         m.add_molecule(m1)
     return m
+
+def get_model(file):
+    if not os.path.exists(file):
+        raise FileNotFoundError("can not find file: %s" %file)
+    filename = os.path.split(file)[-1]
+    ex = os.path.splitext(filename)[-1][1:]
+    if ex not in parsers:
+        print("The parser for this type of file: %s hasn't been implemented!" %ex)
+        raise
+    parser = parsers[ex]
+    model = atoms_to_model(parser(file))
+    model.name = filename
+    return model

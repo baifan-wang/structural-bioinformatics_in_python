@@ -30,6 +30,7 @@ aa_letters_1to3 = {
 aa_BB_name = ['N', 'CA', 'C', 'O']
 na_BB_name = ["P","O5'","C5'","C4'","C3'","O3'"]
 
+solvent = ['HOH','H2O','WAT','SOL','TIP']
 
 dna_weights = {
     "A": 331.2218,
