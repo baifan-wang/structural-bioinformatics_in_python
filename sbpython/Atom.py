@@ -6,7 +6,7 @@ class Atom:
         as well as residue name and serial, chain id in which atom belong to.
         parameters, 'atom' should be a list contains the following information"""
         self._container = ''             #indicate which molecule this atom belong to, object
-        self.serial =        atom[0]    #atom serial number, int
+        self.atom_serial =   atom[0]    #atom serial number, int
         self.name =          atom[1]    #atom name, eg. 'CA', string
         self.res_name =      atom[2]    #residues name, eg. 'ALA', sring
         self.chain_id =      atom[3]    #chain id, one letter, eg. 'A', string
@@ -15,6 +15,7 @@ class Atom:
         assert self.coord.shape == (3, )
         self.element =       atom[8]    #type of element, eg. 'C'
         self.id = self._container+self.chain_id+'.'+self.res_name+'.'+str(self.res_serial)+'.'+self.name  #identification of an atom, eg., A14.CA
+        self.serial = ''                # a absolute int to identify this residue
 
     def __str__(self):
         if self._container is '':
@@ -143,7 +144,7 @@ class Atom:
         else:
             atom_name=self.name.ljust(4)
         s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
-                % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
+                % (self.character.ljust(6) , self.atom_serial , atom_name,  self.res_name.rjust(3) , \
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
                 self.coord[0] , self.coord[1] , self.coord[2] , self.occupancy ,\
                 self.temp_factor , self.segment_indent.ljust(4) , \
@@ -174,12 +175,12 @@ class Dummy(Atom):
     def __str__(self):
         return('Dummy atom object: %s' %self.name)
 
-    def to_pdb(self, serial, res_serial, res_name='MOL', chain_id='A', element='X'):
+    def to_pdb(self, atom_serial, res_serial, res_name='MOL', chain_id='A', element='X'):
         """
         return a PDB format line.
         extra information such atom serial and res_serial must be provided.
         """
-        self.serial = serial
+        self.atom_serial = atom_serial
         self.res_serial = res_serial
         self.res_name = res_name
         self.chain_id = chain_id
@@ -194,7 +195,7 @@ class Dummy(Atom):
 
         atom_name='X'.ljust(4)
         s = "%s%5d %s %3s %1s%4d%s    %8.3f%8.3f%8.3f%6.2f%6.2f      %4s%2s%2s" \
-                % (self.character.ljust(6) , self.serial , atom_name,  self.res_name.rjust(3) , \
+                % (self.character.ljust(6) , self.atom_serial , atom_name,  self.res_name.rjust(3) , \
                 self.chain_id , self.res_serial , self.code_for_insertions_of_residues , \
                 self.x , self.y , self.z , self.occupancy ,\
                 self.temp_factor , self.segment_indent.ljust(4) , \

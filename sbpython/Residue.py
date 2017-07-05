@@ -17,7 +17,7 @@ class Residue:
             for a in self._atoms.values():  #set the container of Atom objects to self.
                 a_container  = self
         self.id = self.chain_id+'.'+self.name+'.'+str(self.res_serial)  #an id to identificate this residue
-
+        self.serial = ''                # a absolute int to identify this residue
     def __str__(self):
         if self._container is '':
             return("Residue object: "+self.id)
@@ -44,8 +44,12 @@ class Residue:
         """
         return (atom in self._atoms.values())
 
+    def _sorted_atom_list(self):
+        return sorted([i for i in self._atoms], \
+            key=lambda x:self._atoms[x].serial)
+
     def get_atom(self):
-        for a in self._atoms:
+        for a in self._sorted_atom_list():
             yield self._atoms[a]
 
     def add_atom(self, atom):
@@ -67,14 +71,14 @@ class Residue:
             raise AttributeError('Not such atom in this residue!')
 
     def atom_list(self):
-        a = sorted(self._atoms[i].serial for i in self._atoms)
+        a = sorted(self._atoms[i].atom_serial for i in self._atoms)
         return a
 
     def coordinates(self):
         """
         return the coordinates of this residue.
         """
-        c= [i[0] for i in sorted([(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms],key=lambda x:x[1])]
+        c= [i[0] for i in sorted([(self._atoms[i].coord, self._atoms[i].atom_serial) for i in self._atoms],key=lambda x:x[1])]
         #looks ugly, there should be a better way
         #c = [(self._atoms[i].coord, self._atoms[i].serial) for i in self._atoms]
         #c = sorted(c, key=lambda x:x[1])
