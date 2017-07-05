@@ -11,7 +11,7 @@ from .Superimposer import *
 from .Structural_analysis import *
 from .pyls import *
 from .Plot import *
-from .Alignment import *
+from .Sequence_alignment import *
 from .Structural_alignment import *
 #from .atoms_to_model import *
 
