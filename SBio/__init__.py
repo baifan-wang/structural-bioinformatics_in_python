@@ -11,17 +11,17 @@ from .Superimposer import *
 from .Structural_analysis import *
 from .pyls import *
 from .Plot import *
-from .Sequence_alignment import *
+from .Sequence_Alignment import *
 from .Structural_alignment import *
 #from .atoms_to_model import *
 
-def atoms_to_model(atoms_list):
-    model = Model()
+def atoms_to_molecule(atoms_list):
+    model = Molecule()
     i=0
     if len(atoms_list)==0:
         raise ValueError('No coordinates are found')
     for atoms in atoms_list:
-        m1 = Molecule()         # creat a Molecule object for each atom list in atoms_list
+        m1 = Model()         # creat a model object for each atom list in atoms_list
         i+=1                    # increasing model number by 1
         m1.name = 'm'+str(i)    # creat a name for each molecule
         m1.serial = i
@@ -45,7 +45,7 @@ def atoms_to_model(atoms_list):
         model.add_molecule(m1)
     return model
 
-def get_model(file):
+def create_moelcule(file):
     if not os.path.exists(file):
         raise FileNotFoundError("can not find file: %s" %file)
     filename = os.path.split(file)[-1]
@@ -54,6 +54,6 @@ def get_model(file):
         print("The parser for this type of file: %s hasn't been implemented!" %ex)
         raise
     parser = parsers[ex]
-    model = atoms_to_model(parser(file))
+    model = atoms_to_molecule(parser(file))
     model.name = filename
     return model

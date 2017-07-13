@@ -33,7 +33,7 @@ class Structural_alignment:
         return np.array(coords)
 
     def superimpose(self, ref_coords, tar_coords):
-        sup = SVDSuperimposer(ref_coords, tar_coords)
+        sup = Superimposer(ref_coords, tar_coords)
         sup.run()
         rmsd = sup.get_rmsd()
         rotation, translation = sup.get_rotran()

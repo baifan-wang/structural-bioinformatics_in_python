@@ -2,10 +2,7 @@ import numpy as np
 from numpy.linalg import svd, det
 
 
-class SVDSuperimposer():
-    """
-    Class to run SVD alignment.
-    """
+class Superimposer():
     def __init__(self, ref_coords, target_coords):
         '''
         tatget coordinates (target_coords) will be put on top of reference coordinates(ref_coords).
@@ -31,7 +28,7 @@ class SVDSuperimposer():
         """
         diff = coords1 - coords2
         n = coords1.shape[0]
-        return np.sqrt(sum(sum(diff * diff)) / n)
+        return np.sqrt(sum(sum(diff*diff))/n)
 
     def run(self):
         """
@@ -40,8 +37,8 @@ class SVDSuperimposer():
         tar_coords = self.target_coords
         ref_coords = self.ref_coords
         # center on centroid
-        av1 = sum(tar_coords) / self.n
-        av2 = sum(ref_coords) / self.n
+        av1 = sum(tar_coords)/self.n
+        av2 = sum(ref_coords)/self.n
         tar_coords = tar_coords - av1
         ref_coords = ref_coords - av2
         # correlation matrix
@@ -59,8 +56,6 @@ class SVDSuperimposer():
         Get the transformed coordinate set.
         y on x = np.dot(y, rot) + tran
         """
-        if self.rotation is None:
-            raise Exception("Nothing superimposed yet.")
         if self.trans_coords is None:
             self.trans_coords = np.dot(self.target_coords, self.rotation) + self.trans
         return self.trans_coords
@@ -69,16 +64,12 @@ class SVDSuperimposer():
         """
         Right multiplying rotation matrix and translation.
         """
-        if self.rotation is None:
-            raise Exception("Nothing superimposed yet.")
         return self.rotation, self.trans
 
     def get_init_rmsd(self):
         """
         Root mean square deviation of untransformed coordinates.
         """
-        if self.target_coords is None:
-            raise Exception("No coordinates set yet.")
         if self.init_rmsd is None:
             self.init_rmsd = self._compute_rms(self.target_coords, self.ref_coords)
         return self.init_rmsd

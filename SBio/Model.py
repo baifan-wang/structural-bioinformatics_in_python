@@ -1,10 +1,10 @@
 import numpy as np
 from .Atom import *
 from .Data import *
-class Molecule():
+class Model():
     """
-    Create Molecule object.
-    The Molecule object stores Residue objects.
+    Create Model object.
+    The Model object stores Residue objects.
     Residue objects are stored in a dict named residues.
     """
     def __init__(self, residues=None, name=None, molecule_type='protein'):
@@ -21,7 +21,7 @@ class Molecule():
         self.serial = ''
     def __str__(self):
         if self._container is '':
-            return("Molecule object: "+self.name)
+            return("Model object: "+self.name)
         else:
             return str(self._container)+'.'+self.name
 

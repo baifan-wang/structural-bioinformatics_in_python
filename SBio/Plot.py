@@ -48,6 +48,7 @@ def plot_torsion_wheel(angles, title, filename, abz=True):
     print("Plotting...")
     width = np.pi/180  # Width of bin in radian
     color_dict = {1:'yellow', 2:'blue', 3:'green', 4:'red', 5:'orange', 6:'magenta', 7:'cyan'}
+
     for i in range(len(angle_hist)):
         for j in range(len(angle_hist[i])):
             if angle_hist[i][j] == 10:
