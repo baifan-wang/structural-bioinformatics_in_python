@@ -8,14 +8,14 @@ class Model():
     Residue objects are stored in a dict named residues.
     """
     def __init__(self, residues=None, name=None, molecule_type='protein'):
-        self._container = ''            #indicate which model this molecule belong to, object
+        self._container = ''            #indicate which molecule this model belong to, object
         if residues is None:           #residues should be a dict, deafult is None
             self._residues = {}         #if None, cerat a empty dict
         else:
             self._residues = residues
             for r in self._residues.vlaues():
                 r._container = self
-        self.name = 'm1'                #molecule name, str, eg., 'M1'
+        self.name = 'm1'                #model name, str, eg., 'M1'
         self.molecule_type = molecule_type #protien, DNA, RNA, HYB(hybird), small, ion, str
 #        self.id = ''
         self.serial = ''
@@ -30,8 +30,8 @@ class Model():
 
     def __getattr__(self, args):
         """
-        Enable the access Atom and Residue in this Molecule object with the following syntax:
-        Molecule.chian+Residue_sreial.Atom_name, e.g.: M1.A12.CA, M2.B1.
+        Enable the access Atom and Residue in this Model object with the following syntax:
+        Model.chian+Residue_sreial.Atom_name, e.g.: M1.A12.CA, M2.B1.
         """
         if args in self._residues:
             return self._residues[args]
@@ -60,12 +60,12 @@ class Model():
 
     def add_residue(self, residue):
         """
-        Adding a residue to this molecule.
+        Adding a residue to this model.
         raise KeyError if key conflict.
         """
         r_id = residue.chain_id+str(residue.res_serial)
         if r_id in self._residues:
-            raise KeyError("%s is already in this molecule!" %r_id)
+            raise KeyError("%s is already in this model!" %r_id)
         self._residues[r_id] = residue
         self._residues[r_id]._container = self
 
@@ -199,7 +199,7 @@ class Model():
         mw += atomic_weight[a.element]
       return mw
 
-    def get_dist_matrix(self):
+    def get_dist_matrix(self, savefile=None):
         """
         Compute the complete inter-atomic distance matrix, which has order of n2 time complexity!
         """
@@ -210,3 +210,10 @@ class Model():
             for a2 in self.get_atom():
                 j = a2.serial-1
                 self.dist_matrix[i,j] = a1.distance(a2)
+        if savefile is not None:
+            with open('savefile', 'w') as f:
+                for i in self.dist_matrix:
+                    for a in i:
+                        data = '%.3f' %a
+                        f.write(str(data)+'\t')
+                    f.write('\n')

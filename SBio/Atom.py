@@ -113,20 +113,6 @@ class Atom:
         if np.dot(a, b) > 0.0: tang = -tang
         return tang
 
-    def plane(self, other2, other3):
-        """
-        Compute the function of plane defined by self, other2, other3.
-        the norm of a plane is (a,b,c)
-        """
-        assert other2.coord.shape == (3, )
-        assert other3.coord.shape == (3, )
-
-        a = (other2.y-self.y)*(other3.z-self.z)-(other2.z-self.z)*(other3.y-self.y)
-        b = (other2.z-self.z)*(other3.x-self.x)-(other2.x-self.x)*(other3.z-self.z)
-        c = (other2.x-self.x)*(other3.y-self.y)-(other2.y-self.y)*(other3.x-self.x)
-        d = (0-(a*self.x+b*self.y+c*self.z))
-        return (a,b,c,d)
-
     def to_pdb(self):
         """
         Return a PDB format line.

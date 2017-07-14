@@ -16,7 +16,7 @@ from .Structural_alignment import *
 #from .atoms_to_model import *
 
 def atoms_to_molecule(atoms_list):
-    model = Molecule()
+    molecule = Molecule()
     i=0
     if len(atoms_list)==0:
         raise ValueError('No coordinates are found')
@@ -42,10 +42,10 @@ def atoms_to_molecule(atoms_list):
                 r1.add_atom(a1)
             n+=1
         m1.add_residue(r1)
-        model.add_molecule(m1)
-    return model
+        molecule.add_model(m1)
+    return molecule
 
-def create_moelcule(file):
+def create_molecule(file):
     if not os.path.exists(file):
         raise FileNotFoundError("can not find file: %s" %file)
     filename = os.path.split(file)[-1]

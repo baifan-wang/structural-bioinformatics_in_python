@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
 import sys,os
 import time
 
-def plot_torsion_wheel(angles, title, filename, abz=True):
+def plot_torsion_wheel(angles, title, filename, abz=True, show = False):
+    if show ==True:
+        import matplotlib.pyplot as plt
+    else:
+        mpl.use('Agg')
+        import matplotlib.pyplot as plt
 
     t1 = time.time()
     label = [r'$\alpha$', r'$\beta$', r'$\gamma$', r'$\delta$', r'$\epsilon$', r'$\zeta$', r'$\chi$']
-    fig = plt.figure(figsize=(7, 7), dpi=300)
+    fig = plt.figure(figsize=(7, 7))
     fig.subplots_adjust(wspace=0.3)     # To adjust gaps and margins of subplots
 
     ax1 = plt.subplot(111, polar=True)  # create a ploar plot
@@ -81,19 +84,25 @@ def plot_torsion_wheel(angles, title, filename, abz=True):
 
     # Clean memory
     del angles
+    if show ==True:
+        plt.show()
+    else:
+        fig.savefig(filename, dpi=180, bbox_inches='tight')
+        t2 = time.time()
+        print('\nTotal time used :%2f s' %(t2-t1))
 
-    #plt.show()
-    fig.savefig(filename, dpi=180, bbox_inches='tight')
-    t2 = time.time()
-    print('\nTotal time used :%2f s' %(t2-t1))
 
-
-def plot_phi_psi(torsion, title, filename):
+def plot_phi_psi(torsion, title, filename, show = False):
+    if show ==True:
+        import matplotlib.pyplot as plt
+    else:
+        mpl.use('Agg')
+        import matplotlib.pyplot as plt
     t1 = time.time()
 
     phi = [i[0] for i in torsion]
     psi = [i[1] for i in torsion]
-    fig = plt.figure(figsize=(7, 7), dpi=300)
+    fig = plt.figure(figsize=(7, 7))
     fig.subplots_adjust(wspace=0.3)     # To adjust gaps and margins of subplots
 
     ax1 = plt.subplot(111)  # create a ploar plot
@@ -119,4 +128,9 @@ def plot_phi_psi(torsion, title, filename):
 
     t2 = time.time()
     print('Total time used :%2f s' %(t2-t1))
-    pass
+    if show ==True:
+        plt.show()
+    else:
+        fig.savefig(filename, dpi=180, bbox_inches='tight')
+        t2 = time.time()
+        print('\nTotal time used :%2f s' %(t2-t1))

@@ -2,12 +2,12 @@ from .Geometry import *
 from .Molecule import *
 import numpy as np
 
-def get_residues(molecule, chain_id, residue_range):
+def get_residues(model, chain_id, residue_range):
     residues = []
     for c in chain_id:
         for i in range(residue_range[0],residue_range[1]+1):
             residue_id = c+str(i)
-            residue = molecule.get_residue_by_id(residue_id)
+            residue = model.get_residue_by_id(residue_id)
             if residue is not None:
                 residues.append(residue)
     return residues
@@ -21,7 +21,7 @@ def strip_none_form_torsion(torsion):
             new_torsion.append(i)
     return new_torsion
 
-def nucleic_acid_torsion(molecule, chain_id, residue_range):
+def nucleic_acid_torsion(model, chain_id, residue_range):
     """ 
         α, O3′−P−O5′−C5′
         β, P−O5′−C5′−C4′
@@ -34,7 +34,7 @@ def nucleic_acid_torsion(molecule, chain_id, residue_range):
         syn:  30°<=χ<=90°
         """
     torsion = []
-    r = get_residues(molecule, chain_id, residue_range)
+    r = get_residues(model, chain_id, residue_range)
     try:
         for i in range(len(r)):
             if i-1 ==-1:
@@ -68,7 +68,20 @@ def nucleic_acid_torsion(molecule, chain_id, residue_range):
         pass
     return torsion
 
-def nucleic_acid_pucker(molecule, chain_id, residue_range):
+def nucleic_acid_torsion_plot(molecule, chain_id, residue_list):
+    torsion = []
+    for m in molecule.get_model():
+        t = nucleic_acid_torsion(m,chain_id,residue_list)
+        t = np.array(t)[:,1:]     #remove the first column, which is residue id.
+        torsion.append(t)
+    t1 = torsion[0]
+
+    for t in torsion[1:]:
+        t1 = np.vstack((t1,t))
+    t1 = np.transpose(t1)
+    return t1
+
+def nucleic_acid_pucker(model, chain_id, residue_range):
     """ 
         ν0, C4′−O4′−C1′−C2′
         ν1, O4′−C1′−C2′−C3′
@@ -89,7 +102,7 @@ def nucleic_acid_pucker(molecule, chain_id, residue_range):
         "O4'-exo":[252,288],
         "C1'-endo":[288,324],
         "C2'-exo":[324,360]}
-    r = get_residues(molecule, chain_id, residue_range)
+    r = get_residues(model, chain_id, residue_range)
     pucker = []
     Pconst = np.sin(np.pi/5) + np.sin(np.pi/2.5)
     for i in r:
@@ -110,12 +123,12 @@ def nucleic_acid_pucker(molecule, chain_id, residue_range):
             pucker.append([r[i].res_serial, v0,v1,v2,v3,v4,tm,P,x])
     return pucker
 
-def protein_tosion(molecule, chain_id, residue_range):
+def protein_tosion(model, chain_id, residue_range):
     """
     φ (phi):  C(i-1),N(i),CA(i),C(i) 
     ψ (psi):  N(i),CA(i),C(i),N(i+1) 
     """
-    r = get_residues(molecule, chain_id, residue_range)
+    r = get_residues(model, chain_id, residue_range)
     torsion = []
     for i in range(len(r)):
         if i-1 == -1:

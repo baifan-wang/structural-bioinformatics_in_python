@@ -31,8 +31,8 @@ class Molecule:
 
     def __getattr__(self, args):
         """
-        Enable the access Atom, Residue and Molecule in Model object with the following syntax:
-        Model.Molecule.chian+Residue_sreial.Atom_name, e.g.: protein1.M1.A12.CA, protein1.M2.
+        Enable the access Atom, Residue and Model in Molecule object with the following syntax:
+        Molecule.Model.chian+Residue_sreial.Atom_name, e.g.: protein1.M1.A12.CA, protein1.M2.
         """
         if args in self._models: 
             return self._models[args]
@@ -47,12 +47,12 @@ class Molecule:
 
     def add_model(self, model):
         """
-        Adding a model to this model.
+        Adding a model to this molecule.
         raise KeyError if key conflicts.
         """
         m_id = model.name
         if m_id in self._models:
-            raise KeyError("%s is already in this model!" %m_id)
+            raise KeyError("%s is already in this molecule!" %m_id)
         self._models[m_id] = model
         self._models[m_id]._container = self
 
@@ -79,3 +79,10 @@ class Molecule:
         Compute the average coords of the alternate locations of an atom.
         """
         pass
+
+    def update_res_serial(self,offset):
+        for m in self._models:
+            for r in m.get_residue():
+                r.res_serial+=offset
+                for a in r.get_atom():
+                    a.res_serial+=offset
