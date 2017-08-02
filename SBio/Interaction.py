@@ -18,9 +18,9 @@ def get_hydrogen_bond(donor,acceptor,donor_H=None,dis_cutoff=3.0,ang_cutoff=135)
     """
     if donor.element not in polar_atoms or acceptor.element not in polar_atoms:
         print("Warning! Non-polar atom(s) detected!")
-    dis = distance(donor, acceptor)
+    dis = get_distance(donor, acceptor)
     if donor_H is not None:
-        ang = angle(donor,donor_H,acceptor)
+        ang = get_angle(donor,donor_H,acceptor)
     else:
         ang = None
     if ang is not None:
@@ -38,7 +38,7 @@ def get_hydrogen_bond(donor,acceptor,donor_H=None,dis_cutoff=3.0,ang_cutoff=135)
 
 def get_polar_interaction(a1, a2, dis_cutoff=3.2):
 
-    dis = distance(a1,a2)
+    dis = get_distance(a1,a2)
     if dis <=dis_cutoff:
         return True, dis
     else:
@@ -49,14 +49,14 @@ def get_average_coords(atom_group):
     a = Dummy('average',average_coords)
     return a
 
-def pi_pi_interaction(agroup1, agroup2):
+def get_pi_pi_interaction(agroup1, agroup2):
     if len(agroup1)<3 or len(agroup2)<3:
         raise ValueError("At least three atoms are required for this type calculation")
     average_coords1 = get_average_coords(agroup1)
     average_coords2 = get_average_coords(agroup2)
-    dis = distance(average_coords1, average_coords2)
-    v1 = plane(agroup1[0],agroup1[1],agroup1[2])[0:3]
-    v2 = plane(agroup2[0],agroup2[1],agroup2[2])[0:3]
+    dis = get_distance(average_coords1, average_coords2)
+    v1 = get_plane(agroup1[0],agroup1[1],agroup1[2])[0:3]
+    v2 = get_plane(agroup2[0],agroup2[1],agroup2[2])[0:3]
     v1 = np.array(v1)
     v2 = np.array(v2)
     ang = vector_angle(v1, v2)

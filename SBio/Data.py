@@ -2,7 +2,7 @@
 #na: nucleic acids(DNA+RNA)
 #BB: backbone
 dna_res= {
-    'DC':'C', 'DG':'G', 'DA':'A', 'DT':'T', 'T':'T', 'DI':'I', 'N':'N'}
+    'DC':'C', 'DG':'G', 'DA':'A', 'DT':'T', 'DI':'I', 'DN':'N'}
 
 rna_res = {
     'C':'C', 'G':'G', 'A':'A', 'U':'U', 'I':'I', 'N':'N'}

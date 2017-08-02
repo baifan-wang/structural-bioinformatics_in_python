@@ -79,6 +79,7 @@ class Molecule:
                 f.write('TER     \n')
                 f.write('ENDMDL\n')
                 i+=1
+        print('Successfully write pdb: {}'.format(pdb))
 
     def getAverageCoords(self):
         """

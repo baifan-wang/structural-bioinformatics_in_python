@@ -88,7 +88,7 @@ class Model():
         else:
             pass
 
-    def residue_list(self):
+    def get_residue_list(self):
         r = sorted(i for i in self._residues)
         return r
 
@@ -135,8 +135,12 @@ class Model():
         temp_residue = sorted(temp_residue, key = lambda x:int(x[1:]) )
         for i in temp_residue:
             residue = self._residues[i]
-            if residue.name in aa_res:
-                sequence.append(aa_res[residue.name])
+            all_res = {}
+            all_res.update(aa_res)
+            all_res.update(dna_res)
+            all_res.update(rna_res)
+            if residue.name in all_res:
+                sequence.append(all_res[residue.name])
         return ''.join(sequence)
 
     def write_fasta(self, chain_id, fasta_file, comment=None):
@@ -186,6 +190,7 @@ class Model():
                 f.write(atom.to_pdb()+'\n')
             f.write('TER     \n')
             f.write('ENDMDL\n')
+        print('Successfully write pdb: {}'.format(pdb))
 
     def update_atomic_coodinates(self, rotation, translation):
         """
@@ -195,7 +200,7 @@ class Model():
         for a in self.get_atom():
             a.transform(rotation, translation)
 
-    def mw(self):
+    def get_mw(self):
       """
       Returns molecular weight
       """
