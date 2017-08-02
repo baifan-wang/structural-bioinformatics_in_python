@@ -178,6 +178,11 @@ class Model():
         with open(pdb, 'w') as f:
             f.write('MODEL       1\n')
             for atom in self.get_atom():
+                res = atom.res_serial
+                break   #get first residue serial number
+            for atom in self.get_atom():
+                if (atom.res_serial != res+1) and (atom.res_serial != res):
+                    f.write('TER     \n')   
                 f.write(atom.to_pdb()+'\n')
             f.write('TER     \n')
             f.write('ENDMDL\n')

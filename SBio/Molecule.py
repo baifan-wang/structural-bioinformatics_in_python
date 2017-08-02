@@ -69,7 +69,13 @@ class Molecule:
             for model in self.get_model():
                 f.write('MODEL       '+str(i)+'\n')
                 for atom in model.get_atom():
-                    f.write(atom.to_pdb()+'\n')
+                    res = atom.res_serial
+                    break   #get first residue serial number
+                for atom in model.get_atom():
+                    if (atom.res_serial != res+1) and (atom.res_serial != res):
+                        f.write('TER     \n')   #if next res_serial is not current or
+                    f.write(atom.to_pdb()+'\n') #sequential, then there must be missing residue or another chain.
+                    res = atom.res_serial
                 f.write('TER     \n')
                 f.write('ENDMDL\n')
                 i+=1
