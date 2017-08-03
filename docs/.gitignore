@@ -8,3 +8,4 @@ Desktop.ini
 dist
 build
 .ipynb_checkpoints
+.gitignore
