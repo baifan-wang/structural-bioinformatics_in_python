@@ -5,7 +5,7 @@ import matplotlib as mpl
 import sys,os
 import time
 
-def plot_torsion_wheel(angles, title, filename, abz=True, show = False):
+def plot_torsion_wheel(angles, title, filename='1.png', abz=True, show = False):
     if show ==True:
         import matplotlib.pyplot as plt
     else:
@@ -91,6 +91,15 @@ def plot_torsion_wheel(angles, title, filename, abz=True, show = False):
         t2 = time.time()
         print('\nTotal time used :%2f s' %(t2-t1))
 
+def strip_none_form_torsion(torsion):
+    new_torsion = []
+    for i in torsion:
+        if None in i:
+            pass
+        else:
+            new_torsion.append(i)
+    return new_torsion
+
 
 def plot_phi_psi(torsion, title, filename, show = False):
     if show ==True:
@@ -99,7 +108,8 @@ def plot_phi_psi(torsion, title, filename, show = False):
         mpl.use('Agg')
         import matplotlib.pyplot as plt
     t1 = time.time()
-
+    torsion = strip_none_form_torsion(torsion)
+    torsion = [i[1:] for i in torsion]
     phi = [i[0] for i in torsion]
     psi = [i[1] for i in torsion]
     fig = plt.figure(figsize=(7, 7))

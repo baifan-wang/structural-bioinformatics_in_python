@@ -12,14 +12,7 @@ def get_residues(model, chain_id, residue_range):
                 residues.append(residue)
     return residues
 
-def strip_none_form_torsion(torsion):
-    new_torsion = []
-    for i in torsion:
-        if None in i:
-            pass
-        else:
-            new_torsion.append(i)
-    return new_torsion
+
 
 def nucleic_acid_torsion(model, chain_id, residue_range):
     """ 
@@ -120,7 +113,7 @@ def nucleic_acid_pucker(model, chain_id, residue_range):
         for x in ps:
             if ps[x][0] <=P <= ps[x][1]:
                 break
-            pucker.append([r[i].res_serial, v0,v1,v2,v3,v4,tm,P,x])
+            pucker.append([i.res_serial, v0,v1,v2,v3,v4,tm,P,x])
     return pucker
 
 def protein_tosion(model, chain_id, residue_range):

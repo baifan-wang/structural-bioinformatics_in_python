@@ -1,4 +1,4 @@
-from .Molecule import *
+from .Model import *
 from .Superimposer import *
 import numpy as np
 class Structural_alignment:
@@ -41,7 +41,7 @@ class Structural_alignment:
 
     def set_reference(self):
         reference = self.reference
-        if isinstance(reference, Molecule):
+        if isinstance(reference, Model):
             self.ref_coords =  self.get_coords(self.reference, self.ref_range)
         elif isinstance(reference, int):
             self.ref_coords =  self.get_coords(self.mol_list[reference], self.res_range[reference])
